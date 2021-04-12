@@ -4,7 +4,7 @@ public class MinSegmentTree {
     int t[];
 
     // method to implement segment tree
-    void segmentTree(int nums[], int n) {
+    public MinSegmentTree(int nums[], int n) {
         t = new int[n * 4];
         Arrays.fill(t, Integer.MAX_VALUE);
         build(0, nums, 0, n - 1);

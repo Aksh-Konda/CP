@@ -161,9 +161,9 @@ output =3265
 
 import java.util.*;
 
-class AssignBikes {
+public class AssignBikes {
 
-    int max = Integer.MIN_VALUE;
+    static int max = Integer.MIN_VALUE;
 
     public int assignBikes(int[][] workers, int[][] bikes) {
         int[] dp = new int[1 << bikes.length];
@@ -180,9 +180,8 @@ class AssignBikes {
         max = Math.max(max, used);
         for (int i = 0; i < bikes.length; i++) {
             if ((used & (1 << i)) == 0) {
-                used |= (1 << i); // set i th bit
-                min = Math.min(min, dist(workers[count], bikes[i]) + dfs(workers, bikes, used, count + 1, dp));
-                used &= ~(1 << i); // unset i th bit
+                min = Math.min(min,
+                        dist(workers[count], bikes[i]) + dfs(workers, bikes, used | (1 << i), count + 1, dp));
             }
 
         }
