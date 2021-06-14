@@ -1,0 +1,109 @@
+import java.util.*;
+
+public class Program1 {
+    static Trie trie;
+
+    public static void main(String args[]) {
+        Scanner scn = new Scanner(System.in);
+        String[] traps = scn.nextLine().split(" ");
+        int[] key = new int[4];
+
+        int i = 0;
+        for (char ch : scn.next().toCharArray()) {
+            key[i++] = ch - '0';
+        }
+
+        System.out.println(getMinRotations(traps, key));
+
+        scn.close();
+    }
+
+    public static int getMinRotations(String[] traps, int[] key) {
+        trie = new Trie(traps);
+        int[] curr = new int[4];
+        int min = dfs(key, curr);
+        return min != Integer.MAX_VALUE ? min : -1;
+    }
+
+    static int dfs(int[] key, int i) {
+        if (i < 0)
+            return 0;
+        if (trie.anyMatch(key))
+            return Integer.MAX_VALUE;
+        trie.add(key);
+
+        int k = key[i];
+        int min = Math.min(k, (10-k+1));
+
+        return min;
+    }
+
+    static boolean match(int[] key, int[] m) {
+        for (int i = 0; i < key.length; i++) {
+            if (key[i] != m[i])
+                return false;
+        }
+        return true;
+    }
+}
+
+class Trie {
+    Node root;
+
+    static class Node {
+        Node next[];
+        boolean isEnd;
+
+        Node() {
+            next = new Node[10];
+        }
+    }
+
+    Trie(String[] strs) {
+        root = new Node();
+        for (String str : strs) {
+            add(str.toCharArray());
+        }
+    }
+
+    void add(char[] str) {
+        Node curr = root;
+
+        for (char ch : str) {
+            if (curr.next[ch - '0'] == null) {
+                curr.next[ch - '0'] = new Node();
+            }
+            curr = curr.next[ch - '0'];
+        }
+
+        curr.isEnd = true;
+    }
+
+    void add(int[] str) {
+        Node curr = root;
+
+        for (int d : str) {
+            if (curr.next[d] == null) {
+                curr.next[d] = new Node();
+            }
+            curr = curr.next[d];
+        }
+
+        curr.isEnd = true;
+    }
+
+    boolean anyMatch(int[] key) {
+        Node curr = root;
+
+        System.out.println(Arrays.toString(key));
+
+        for (int d : key) {
+            if (curr.next[d] == null) {
+                return false;
+            }
+            curr = curr.next[d];
+        }
+
+        return curr.isEnd;
+    }
+}
